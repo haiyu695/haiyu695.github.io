@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韩老师全能英语｜12周每日打卡</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Microsoft Yahei", "PingFang SC", sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #eef5ff 0%, #f7fbff 100%);
+    color: #222;
+    padding: 24px 16px;
+    min-height: 100vh;
+  }
+
+  .app {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .main-card{
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(43, 91, 156, 0.12);
+    padding: 28px 24px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #2b5b9c;
+    font-size:24px;
+    margin-bottom:6px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #666;
+    font-size:14px;
+    margin-bottom:22px;
+  }
+
+  /* ====== 今日任务模块 ====== */
+  .today-task-card{
+    background:#e8f2ff;
+    border-radius:14px;
+    padding:18px;
+    margin-bottom:20px;
+  }
+  .today-task-card h2{
+    color:#2b5b9c;
+    font-size:18px;
+    margin-bottom:8px;
+  }
+  .phase-info{
+    background:#dcebff;
+    border-radius:8px;
+    padding:8px 12px;
+    font-size:14px;
+    color:#2b5b9c;
+    margin-bottom:12px;
+  }
+  .task-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 0;
+  }
+  .task-desc{
+    font-size:14px;
+    color:#333;
+  }
+  .note-area{
+    width:100%;
+    min-height:80px;
+    margin-top:12px;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #c9def8;
+    background:#fff;
+    font-size:14px;
+  }
+  .btn-row{
+    margin-top:12px;
+    display:flex;
+    gap:10px;
+  }
+
+  .progress-card {
+    background: #f4f9ff;
+    border: 1px solid #dcebff;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+
+  .progress-title {
+    font-size: 15px;
+    color: #2b5b9c;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 14px;
+    background: #e2eefc;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4fa3ff, #36d399);
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.35s ease;
+  }
+
+  .progress-text {
+    display: flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+  }
+
+  .month-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+
+  .month-card {
+    background: #ffffff;
+    border: 1px solid #dcebff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 4px 14px rgba(43, 91, 156, 0.08);
+  }
+
+  .month-card h3 {
+    color: #2b5b9c;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .month-card p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .module {
+    background: #ffffff;
+    border: 1px solid #e5eefc;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(43, 91, 156, 0.06);
+  }
+
+  .module-header {
+    padding: 16px 18px;
+    background: #f4f9ff;
+    color: #2b5b9c;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+
+  .module-header .arrow {
+    transition: transform 0.25s ease;
+    font-size: 14px;
+    color: #5b8fd1;
+  }
+
+  .module-header.active .arrow {
+    transform: rotate(180deg);
+  }
+
+  .lesson-list {
+    padding: 10px 18px 14px;
+    display: none;
+    background: #ffffff;
+  }
+
+  .lesson-list.open {
+    display: block;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 4px;
+    border-bottom: 1px dashed #eef3fb;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .item:last-child {
+    border-bottom: none;
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #3b82f6;
+    flex-shrink: 0;
+  }
+
+  .tip {
+    margin-left: auto;
+    background: #eaf4ff;
+    color: #2b5b9c;
+    font-size: 12px;
+    padding: 3px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .reset-area {
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  button {
+    background: #2b5b9c;
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  button:hover {
+    background: #1f4578;
+  }
+
+  button.reset {
+    background: #fff;
+    color: #c53030;
+    border: 1px solid #f5c6c6;
+  }
+
+  button.reset:hover {
+    background: #fff5f5;
+  }
+  .btn-clear-day{
+    background:#6c757d;
+  }
+
+  @media (max-width:768px){
+    .month-cards {
+      grid-template-columns: 1fr;
+    }
+    h1 {
+      font-size: 21px;
+    }
+  }
+</style>
+</head>
+
+<body>
+<div class="app">
+  <h1>韩老师全能英语｜12周每日打卡</h1>
+  <!-- 修改副标题 -->
+  <p class="subtitle">每日90分钟｜周一~周六学习，周日复盘｜先纠音，再练句，不要单独背单词学语法</p>
+
+  <div class="main-card">
+    <!--【修改】总进度放到最顶部，删除跳转行 -->
+    <div class="progress-card">
+      <div class="progress-title">📊 总进度</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="bar"></div>
+      </div>
+      <div class="progress-text">
+        <span>✅ 已完成课时：<b id="done">0</b></span>
+        <span>📚 总课时：<b id="total">0</b></span>
+        <span>🎯 完成率：<b id="percent">0%</b></span>
+        <span>🗓️ 已学习天数：<b id="studyDays">0</b>天</span>
+      </div>
+    </div>
+
+    <!-- 今日任务 -->
+    <div class="today-task-card">
+      <h2>📖 今日任务：Day<span id="showDay">1</span></h2>
+      <!-- 新增：月份+课程板块信息 -->
+      <div class="phase-info" id="phaseInfo">
+        <b>第1个月｜发音筑基｜课程板块：学习方法</b>
+      </div>
+      <div id="todayTaskList">
+        <!-- 动态渲染当日任务 -->
+      </div>
+      <textarea class="note-area" id="noteInput" placeholder="今日备注、难点、学习感悟，自动保存..."></textarea>
+      <div class="btn-row">
+        <button id="saveDayBtn">保存当日打卡</button>
+        <button class="btn-clear-day" id="clearDayBtn">清空当日勾选</button>
+      </div>
+    </div>
+
+    <div class="month-cards">
+      <div class="month-card">
+        <h3>📅 第1个月｜发音筑基</h3>
+        <p><b>阶段1：第1–2周｜发音唤醒</b><br>目标：恢复音标感知、连读弱读、单词拼读能力。</p>
+      </div>
+      <div class="month-card">
+        <h3>📅 第2个月｜词汇句型</h3>
+        <p><b>阶段2：第3–7周｜词汇句型搭建</b><br>目标：积累场景词，能套用句型造句。</p>
+      </div>
+      <div class="month-card">
+        <h3>📅 第3个月｜口语实战</h3>
+        <p><b>阶段3：第8–12周｜口语输出</b><br>目标：掌握小词，完成日常场景对话。</p>
+      </div>
+    </div>
+
+    <!-- ========= 任务列表，恢复至130条 ========= -->
+    <!-- 模块0 学习方法 -->
+    <div class="module">
+      <div class="module-header" onclick="toggle(this)">📂 0-学习方法 <span class="arrow">▼</span></div>
+      <div class="lesson-list">
+        <div class="item"><input type="checkbox" data-day="1" data-month="1" data-block="学习方法"><span>观看0-学习方法全部课程（25min）</span><span class="tip">Day1</span></div>
+        <div class="item"><input type="checkbox" data-day="1" data-month="1" data-block="学习方法"><span>建立笔记本4个分区：发音笔记｜场景单词｜母句型｜小词&口语（10min）</span><span class="tip">Day1</span></div>
+        <div class="item"><input type="checkbox" data-day="1" data-month="1" data-block="学习方法"><span>规划复习节奏，写下个人学习目标（10min）</span><span class="tip">Day1</span></div>
+        <div class="item"><input type="checkbox" data-day="1" data-month="1" data-block="学习方法"><span>试听音标开篇音频，标记发音薄弱板块（45min）</span><span class="tip">Day1</span></div>
+      </div>
+    </div>
+
+    <!-- 模块1 音标课 -->
+    <div class="module">
+      <div class="module-header" onclick="toggle(this)">📂 1-音标课【第1个月，Day2~Day15】 <span class="arrow">▼</span></div>
+      <div class="lesson-list">
+        <div class="item"><input type="checkbox" data-day="2" data-month="1" data-block="音标课"><span>01 认识音标</span><span class="tip">Day2</span></div>
+        <div class="item"><input type="checkbox" data-day="3" data-month="1" data-block="音标课"><span>02 单元音 /iː/ /ɪ/</span><span class="tip">Day3</span></div>
+        <div class="item"><input type="checkbox" data-day="4" data-month="1" data-block="音标课"><span>03 单元音 /e/ /æ/</span><span class="tip">Day4</span></div>
+        <div class="item"><input type="checkbox" data-day="5" data-month="1" data-block="音标课"><span>04 单元音 /ɑː/ /ʌ/ /ɔː/ /ʊ/ /uː/ /ɜː/ /ə/</span><span class="tip">Day5</span></div>
+        <div class="item"><input type="checkbox" data-day="6" data-month="1" data-block="音标课"><span>05 双元音 /eɪ/ /aɪ/ /ɔɪ/</span><span class="tip">Day6</span></div>
+        <div class="item"><input type="checkbox" data-day="7" data-month="1" data-block="音标课"><span>06 双元音 /aʊ/ /əʊ/ /ɪə/ /eə/ /ʊə/</span><span class="tip">Day7</span></div>
+        <div class="item"><input type="checkbox" data-day="8" data-month="1" data-block="音标课"><span>07 音标总复习+跟读训练</span><span class="tip">Day8</span></div>
+        <div class="item"><input type="checkbox" data-day="9" data-month="1" data-block="音标课"><span>08 清辅音 /p/ /t/ /k/ /f/ /s/ /θ/ /ʃ/ /tʃ/ /tr/ /ts/</span><span class="tip">Day9</span></div>
+        <div class="item"><input type="checkbox" data-day="10" data-month="1" data-block="音标课"><span>09 浊辅音 /b/ /d/ /g/ /v/ /z/ /ð/ /ʒ/ /dʒ/ /dr/ /dz/</span><span class="tip">Day10</span></div>
+        <div class="item"><input type="checkbox" data-day="11" data-month="1" data-block="音标课"><span>10 鼻音+边音 /m/ /n/ /ŋ/ /l/ /r/ /h/ /j/ /w/</span><span class="tip">Day11</span></div>
+        <div class="item"><input type="checkbox" data-day="12" data-month="1" data-block="音标课"><span>11 辅音组合拼读练习</span><span class="tip">Day12</span></div>
+        <div class="item"><input type="checkbox" data-day="13" data-month="1" data-block="音标课"><span>12 单词重音练习</span><span class="tip">Day13</span></div>
+        <div class="item"><input type="checkbox" data-day="14" data-month="1" data-block="音标课"><span>13 连读规则</span><span class="tip">Day14</span></div>
+        <div class="item"><input type="checkbox" data-day="15" data-month="1" data-block="音标课"><span>14 弱读、失爆、同化</span><span class="tip">Day15</span></div>
+      </div>
+    </div>
+
+    <!-- 模块2 自然拼读 -->
+    <div class="module">
+      <div class="module-header" onclick="toggle(this)">📂 2-自然拼读【第1个月，Day16~Day30】 <span class="arrow">▼</span></div>
+      <div class="lesson-list">
+        <div class="item"><input type="checkbox" data-day="16" data-month="1" data-block="自然拼读"><span>01 字母发音基础 a b c d e f g</span><span class="tip">Day16</span></div>
+        <div class="item"><input type="checkbox" data-day="17" data-month="1" data-block="自然拼读"><span>02 字母发音基础 h i j k l m n</span><span class="tip">Day17</span></div>
+        <div class="item"><input type="checkbox" data-day="18" data-month="1" data-block="自然拼读"><span>03 字母发音基础 o p q r s t u v w x y z</span><span class="tip">Day18</span></div>
+        <div class="item"><input type="checkbox" data-day="19" data-month="1" data-block="自然拼读"><span>04 CVC短元音单词 a</span><span class="tip">Day19</span></div>
+        <div class="item"><input type="checkbox" data-day="20" data-month="1" data-block="自然拼读"><span>05 CVC短元音单词 e i</span><span class="tip">Day20</span></div>
+        <div class="item"><input type="checkbox" data-day="21" data-month="1" data-block="自然拼读"><span>06 CVC短元音单词 o u</span><span class="tip">Day21</span></div>
+        <div class="item"><input type="checkbox" data-day="22" data-month="1" data-block="自然拼读"><span>07 CVC单词综合拼读训练</span><span class="tip">Day22</span></div>
+        <div class="item"><input type="checkbox" data-day="23" data-month="1" data-block="自然拼读"><span>08 长元音组合 ai ay ee ea</span><span class="tip">Day23</span></div>
+        <div class="item"><input type="checkbox" data-day="24" data-month="1" data-block="自然拼读"><span>09 长元音组合 igh ie oa ow ui ew</span><span class="tip">Day24</span></div>
+        <div class="item"><input type="checkbox" data-day="25" data-month="1" data-block="自然拼读"><span>10 r元音 ar or ir ur er</span><span class="tip">Day25</span></div>
+        <div class="item"><input type="checkbox" data-day="26" data-month="1" data-block="自然拼读"><span>11 元音组合总复习</span><span class="tip">Day26</span></div>
+        <div class="item"><input type="checkbox" data-day="27" data-month="1" data-block="自然拼读"><span>12 辅音组合 sh ch th ph wh</span><span class="tip">Day27</span></div>
+        <div class="item"><input type="checkbox" data-day="28" data-month="1" data-block="自然拼读"><span>13 辅音组合 ck ng nk</span><span class="tip">Day28</span></div>
+        <div class="item"><input type="checkbox" data-day="29" data-month="1" data-block="自然拼读"><span>14 单词重音规则</span><span class="tip">Day29</span></div>
+        <div class="item"><input type="checkbox" data-day="30" data-month="1" data-block="自然拼读"><span>15 自然拼读整段短文朗读</span><span class="tip">Day30</span></div>
+      </div>
+    </div>
+
+    <!-- 模块3 场景单词 -->
+    <div class="module">
+      <div class="module-header" onclick="toggle(this)">📂 3-场景单词【第2个月，Day31~Day45】 <span class="arrow">▼</span></div>
+      <div class="lesson-list">
+        <div class="item"><input type="checkbox" data-day="31" data-month="2" data-block="场景单词"><span>01 家庭人物（上）</span><span class="tip">Day31</span></div>
+        <div class="item"><input type="checkbox" data-day="32" data-month="2" data-block="场景单词"><span>02 家庭人物（下）</span><span class="tip">Day32</span></div>
+        <div class="item"><input type="checkbox" data-day="33" data-month="2" data-block="场景单词"><span>03 家居物品（上）</span><span class="tip">Day33</span></div>
+        <div class="item"><input type="checkbox" data-day="34" data-month="2" data-block="场景单词"><span>04 家居物品（下）</span><span class="tip">Day34</span></div>
+        <div class="item"><input type="checkbox" data-day="35" data-month="2" data-block="场景单词"><span>05 食物餐饮（上）</span><span class="tip">Day35</span></div>
+        <div class="item"><input type="checkbox" data-day="36" data-month="2" data-block="场景单词"><span>06 食物餐饮（下）</span><span class="tip">Day36</span></div>
+        <div class="item"><input type="checkbox" data-day="37" data-month="2" data-block="场景单词"><span>07 出行交通（上）</span><span class="tip">Day37</span></div>
+        <div class="item"><input type="checkbox" data-day="38" data-month="2" data-block="场景单词"><span>08 出行交通（下）</span><span class="tip">Day38</span></div>
+        <div class="item"><input type="checkbox" data-day="39" data-month="2" data-block="场景单词"><span>09 职业（上）</span><span class="tip">Day39</span></div>
+        <div class="item"><input type="checkbox" data-day="40" data-month="2" data-block="场景单词"><span>10 职业（下）</span><span class="tip">Day40</span></div>
+        <div class="item"><input type="checkbox" data-day="41" data-month="2" data-block="场景单词"><span>11 身体部位（上）</span><span class="tip">Day41</span></div>
+        <div class="item"><input type="checkbox" data-day="42" data-month="2" data-block="场景单词"><span>12 身体部位（下）</span><span class="tip">Day42</span></div>
+        <div class="item"><input type="checkbox" data-day="43" data-month="2" data-block="场景单词"><span>13 城市场所（上）</span><span class="tip">Day43</span></div>
+        <div class="item"><input type="checkbox" data-day="44" data-month="2" data-block="场景单词"><span>14 城市场所（下）</span><span class="tip">Day44</span></div>
+        <div class="item"><input type="checkbox" data-day="45" data-month="2" data-block="场景单词"><span>15 场景单词总复习</span><span class="tip">Day45</span></div>
+      </div>
+    </div>
+
+    <!-- 模块4 万能句型 -->
+    <div class="module">
+      <div class="module-header" onclick="toggle(this)">📂 4-万能句型【第2个月，Day46~Day60】 <span class="arrow">▼</span></div>
+      <div class="lesson-list">
+        <div class="item"><input type="checkbox" data-day="46" data-month="2" data-block="万能句型"><span>01 L1十字要诀-想要(一)</span><span class="tip">Day46</span></div>
+        <div class="item"><input type="checkbox" data-day="46" data-month="2" data-block="万能句型"><span>02 L1十字要诀-想要(二)</span><span class="tip">Day46</span></div>
+        <div class="item"><input type="checkbox" data-day="47" data-month="2" data-block="万能句型"><span>03 L1十字要诀-想要(三)</span><span class="tip">Day47</span></div>
+        <div class="item"><input type="checkbox" data-day="47" data-month="2" data-block="万能句型"><span>04 L2十字要诀-是</span><span class="tip">Day47</span></div>
+        <div class="item"><input type="checkbox" data-day="48" data-month="2" data-block="万能句型"><span>05 L3十字要诀-有（一）</span><span class="tip">Day48</span></div>
+        <div class="item"><input type="checkbox" data-day="48" data-month="2" data-block="万能句型"><span>06 L3十字要诀-有(二)</span><span class="tip">Day48</span></div>
+        <div class="item"><input type="checkbox" data-day="49" data-month="2" data-block="万能句型"><span>07 L4十字要诀-能（一）</span><span class="tip">Day49</span></div>
+        <div class="item"><input type="checkbox" data-day="49" data-month="2" data-block="万能句型"><span>08 L4十字要诀-能(二)</span><span class="tip">Day49</span></div>
+        <div class="item"><input type="checkbox" data-day="50" data-month="2" data-block="万能句型"><span>09 L5十字要诀-让</span><span class="tip">Day50</span></div>
+        <div class="item"><input type="checkbox" data-day="50" data-month="2" data-block="万能句型"><span>10 L6十字要诀-给</span><span class="tip">Day50</span></div>
+        <div class="item"><input type="checkbox" data-day="51" data-month="2" data-block="万能句型"><span>11 L7十字要诀-做</span><span class="tip">Day51</span></div>
+        <div class="item"><input type="checkbox" data-day="51" data-month="2" data-block="万能句型"><span>12 L8十字要诀-去</span><span class="tip">Day51</span></div>
+        <div class="item"><input type="checkbox" data-day="52" data-month="2" data-block="万能句型"><span>13 L9十字要诀-拿</span><span class="tip">Day52</span></div>
+        <div class="item"><input type="checkbox" data-day="52" data-month="2" data-block="万能句型"><span>14 L10母句型1</span><span class="tip">Day52</span></div>
+        <div class="item"><input type="checkbox" data-day="53" data-month="2" data-block="万能句型"><span>15 L11母句型2</span><span class="tip">Day53</span></div>
+        <div class="item"><input type="checkbox" data-day="53" data-month="2" data-block="万能句型"><span>16 L12母句型3</span><span class="tip">Day53</span></div>
+        <div class="item"><input type="checkbox" data-day="54" data-month="2" data-block="万能句型"><span>17 L13母句型4</span><span class="tip">Day54</span></div>
+        <div class="item"><input type="checkbox" data-day="54" data-month="2" data-block="万能句型"><span>18 L14母句型5</span><span class="tip">Day54</span></div>
+        <div class="item"><input type="checkbox" data-day="55" data-month="2" data-block="万能句型"><span>19 L15母句型6</span><span class="tip">Day55</span></div>
+        <div class="item"><input type="checkbox" data-day="55" data-month="2" data-block="万能句型"><span>20 L16母句型7</span><span class="tip">Day55</span></div>
+        <div class="item"><input type="checkbox" data-day="56" data-month="2" data-block="万能句型"><span>21 L17母句型8</span><span class="tip">Day56</span></div>
+        <div class="item"><input type="checkbox" data-day="56" data-month="2" data-block="万能句型"><span>22 L18母句型9</span><span class="tip">Day56</span></div>
+        <div class="item"><input type="checkbox" data-day="57" data-month="2" data-block="万能句型"><span>23 L19母句型10</span><span class="tip">Day57</span></div>
+        <div class="item"><input type="checkbox" data-day="57" data-month="2" data-block="万能句型"><span>24 L20母句型11</span><span class="tip">Day57</span></div>
+        <div class="item"><input type="checkbox" data-day="58" data-month="2" data-block="万能句型"><span>25 L21母句型12</span><span class="tip">Day58</span></div>
+        <div class="item"><input type="checkbox" data-day="58" data-month="2" data-block="万能句型"><span>26 L22母句型13</span><span class="tip">Day58</span></div>
+        <div class="item"><input type="checkbox" data-day="59" data-month="2" data-block="万能句型"><span>27 L23母句型14</span><span class="tip">Day59</span></div>
+        <div class="item"><input type="checkbox" data-day="59" data-month="2" data-block="万能句型"><span>28 L24母句型15</span><span class="tip">Day59</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>29 L25母句型16</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>30 L26母句型17</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>31 L27母句型18</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>32 L28母句型19</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>33 L29母句型20</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>34 L30母句型21</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>35 L31母句型22</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>36 L32母句型23</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>37 L33母句型24</span><span class="tip">Day60</span></div>
+        <div class="item"><input type="checkbox" data-day="60" data-month="2" data-block="万能句型"><span>🎵 母句型全部合集（音频复习）</span><span class="tip">Day60</span></div>
+      </div>
+    </div>
+
+    <!-- 模块5 小词活用 -->
+    <div class="module">
+      <div class="module-header" onclick="toggle(this)">📂 5-小词活用【第3个月，Day61~Day75】 <span class="arrow">▼</span></div>
+      <div class="lesson-list">
+        <div class="item"><input type="checkbox" data-day="61" data-month="3" data-block="小词活用"><span>01 L30身体部位（上）</span><span class="tip">Day61</span></div>
+        <div class="item"><input type="checkbox" data-day="62" data-month="3" data-block="小词活用"><span>02 L31身体部位（中）</span><span class="tip">Day62</span></div>
+        <div class="item"><input type="checkbox" data-day="63" data-month="3" data-block="小词活用"><span>03 L32身体部位（下）</span><span class="tip">Day63</span></div>
+        <div class="item"><input type="checkbox" data-day="64" data-month="3" data-block="小词活用"><span>04 小词活用第4课</span><span class="tip">Day64</span></div>
+        <div class="item"><input type="checkbox" data-day="65" data-month="3" data-block="小词活用"><span>05 小词活用第5课</span><span class="tip">Day65</span></div>
+        <div class="item"><input type="checkbox" data-day="66" data-month="3" data-block="小词活用"><span>06 小词活用第6课</span><span class="tip">Day66</span></div>
+        <div class="item"><input type="checkbox" data-day="67" data-month="3" data-block="小词活用"><span>07 小词活用第7课</span><span class="tip">Day67</span></div>
+        <div class="item"><input type="checkbox" data-day="68" data-month="3" data-block="小词活用"><span>08 小词活用第8课</span><span class="tip">Day68</span></div>
+        <div class="item"><input type="checkbox" data-day="69" data-month="3" data-block="小词活用"><span>09 小词活用第9课</span><span class="tip">Day69</span></div>
+        <div class="item"><input type="checkbox" data-day="70" data-month="3" data-block="小词活用"><span>10 小词活用第10课</span><span class="tip">Day70</span></div>
+        <div class="item"><input type="checkbox" data-day="71" data-month="3" data-block="小词活用"><span>11 小词活用第11课</span><span class="tip">Day71</span></div>
+        <div class="item"><input type="checkbox" data-day="72" data-month="3" data-block="小词活用"><span>12 小词活用第12课</span><span class="tip">Day72</span></div>
+        <div class="item"><input type="checkbox" data-day="73" data-month="3" data-block="小词活用"><span>13 小词活用第13课</span><span class="tip">Day73</span></div>
+        <div class="item"><input type="checkbox" data-day="73" data-month="3" data-block="小词活用"><span>14 小词活用第14课</span><span class="tip">Day73</span></div>
+        <div class="item"><input type="checkbox" data-day="74" data-month="3" data-block="小词活用"><span>15 小词活用第15课</span><span class="tip">Day74</span></div>
+        <div class="item"><input type="checkbox" data-day="74" data-month="3" data-block="小词活用"><span>16 小词活用第16课</span><span class="tip">Day74</span></div>
+        <div class="item"><input type="checkbox" data-day="75" data-month="3" data-block="小词活用"><span>17 小词活用第17课</span><span class="tip">Day75</span></div>
+        <div class="item"><input type="checkbox" data-day="75" data-month="3" data-block="小词活用"><span>18 小词活用第18课</span><span class="tip">Day75</span></div>
+        <div class="item"><input type="checkbox" data-day="75" data-month="3" data-block="小词活用"><span>🎵 小词活用合集（音频复习）</span><span class="tip">Day75</span></div>
+      </div>
+    </div>
+
+    <!-- 模块6 场景口语 -->
+    <div class="module">
+      <div class="module-header" onclick="toggle(this)">📂 6-场景口语【第3个月，Day76~Day84】 <span class="arrow">▼</span></div>
+      <div class="lesson-list">
+        <div class="item"><input type="checkbox" data-day="76" data-month="3" data-block="场景口语"><span>01 L49初次见面</span><span class="tip">Day76</span></div>
+        <div class="item"><input type="checkbox" data-day="76" data-month="3" data-block="场景口语"><span>02 L50谈论天气</span><span class="tip">Day76</span></div>
+        <div class="item"><input type="checkbox" data-day="77" data-month="3" data-block="场景口语"><span>03 L51谈论爱好</span><span class="tip">Day77</span></div>
+        <div class="item"><input type="checkbox" data-day="77" data-month="3" data-block="场景口语"><span>04 L52谈论国籍</span><span class="tip">Day77</span></div>
+        <div class="item"><input type="checkbox" data-day="78" data-month="3" data-block="场景口语"><span>05 L53谈论职业</span><span class="tip">Day78</span></div>
+        <div class="item"><input type="checkbox" data-day="78" data-month="3" data-block="场景口语"><span>06 L54谈论家庭</span><span class="tip">Day78</span></div>
+        <div class="item"><input type="checkbox" data-day="79" data-month="3" data-block="场景口语"><span>07 L55谈论性格</span><span class="tip">Day79</span></div>
+        <div class="item"><input type="checkbox" data-day="79" data-month="3" data-block="场景口语"><span>08 L56谈论外貌</span><span class="tip">Day79</span></div>
+        <div class="item"><input type="checkbox" data-day="80" data-month="3" data-block="场景口语"><span>09 L57谈论心情</span><span class="tip">Day80</span></div>
+        <div class="item"><input type="checkbox" data-day="80" data-month="3" data-block="场景口语"><span>10 L58谈论健康</span><span class="tip">Day80</span></div>
+        <div class="item"><input type="checkbox" data-day="81" data-month="3" data-block="场景口语"><span>11 L59谈论食物</span><span class="tip">Day81</span></div>
+        <div class="item"><input type="checkbox" data-day="81" data-month="3" data-block="场景口语"><span>12 L60谈论出行</span><span class="tip">Day81</span></div>
+        <div class="item"><input type="checkbox" data-day="82" data-month="3" data-block="场景口语"><span>13 L61餐厅场景(上)</span><span class="tip">Day82</span></div>
+        <div class="item"><input type="checkbox" data-day="82" data-month="3" data-block="场景口语"><span>14 L61餐厅场景(中)</span><span class="tip">Day82</span></div>
+        <div class="item"><input type="checkbox" data-day="83" data-month="3" data-block="场景口语"><span>15 L61餐厅场景(下)</span><span class="tip">Day83</span></div>
+        <div class="item"><input type="checkbox" data-day="83" data-month="3" data-block="场景口语"><span>16 L62餐厅场景：电话预定</span><span class="tip">Day83</span></div>
+        <div class="item"><input type="checkbox" data-day="84" data-month="3" data-block="场景口语"><span>17 L63餐厅场景：忌口</span><span class="tip">Day84</span></div>
+        <div class="item"><input type="checkbox" data-day="84" data-month="3" data-block="场景口语"><span>18 L64购物场景(上)</span><span class="tip">Day84</span></div>
+      </div>
+    </div>
+
+    <div class="reset-area">
+      <button class="reset" onclick="resetAll()">🔄 重置全部打卡记录</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentDay = 1;
+  function toggle(header) {
+    header.classList.toggle("active");
+    header.nextElementSibling.classList.toggle("open");
+  }
+
+  const boxes = document.querySelectorAll('input[type="checkbox"]');
+  const doneEl = document.getElementById("done");
+  const totalEl = document.getElementById("total");
+  const percentEl = document.getElementById("percent");
+  const barEl = document.getElementById("bar");
+  const showDay = document.getElementById("showDay");
+  const todayTaskList = document.getElementById("todayTaskList");
+  const noteInput = document.getElementById("noteInput");
+  const saveDayBtn = document.getElementById("saveDayBtn");
+  const clearDayBtn = document.getElementById("clearDayBtn");
+  const studyDaysEl = document.getElementById("studyDays");
+  const phaseInfoEl = document.getElementById("phaseInfo");
+
+  // 月份名称映射
+  const monthNameMap = {
+    1:"第1个月｜发音筑基",
+    2:"第2个月｜词汇句型",
+    3:"第3个月｜口语实战"
+  };
+
+  // 渲染今日任务
+  function renderTodayTask(day){
+    todayTaskList.innerHTML = "";
+    const dayBoxList = Array.from(boxes).filter(cb => cb.dataset.day == day);
+    if(dayBoxList.length>0){
+      const firstCb = dayBoxList[0];
+      const m = firstCb.dataset.month;
+      const block = firstCb.dataset.block;
+      phaseInfoEl.innerHTML = `<b>${monthNameMap[m]}｜课程板块：${block}</b>`;
+    }else{
+      phaseInfoEl.innerHTML = `<b>暂无信息</b>`;
+    }
+    dayBoxList.forEach(cb=>{
+      const itemWrap = document.createElement('div');
+      itemWrap.className = 'task-item';
+      const spanText = cb.parentElement.querySelector('span').innerText;
+      itemWrap.innerHTML = `<input type="checkbox" ${cb.checked?'checked':''}> <span class="task-desc">${spanText}</span>`;
+      const taskCb = itemWrap.querySelector('input');
+      taskCb.onchange = ()=>{
+        cb.checked = taskCb.checked;
+        save();
+      }
+      todayTaskList.appendChild(itemWrap);
+    })
+  }
+
+  function save() {
+    const arr = Array.from(boxes).map(cb => cb.checked);
+    localStorage.setItem("en_check", JSON.stringify(arr));
+    // 保存笔记
+    const noteObj = JSON.parse(localStorage.getItem("en_note")||'{}');
+    noteObj[currentDay] = noteInput.value;
+    localStorage.setItem("en_note", JSON.stringify(noteObj));
+    calc();
+    renderTodayTask(currentDay);
+  }
+
+  function calc() {
+    let done = 0;
+    boxes.forEach(cb => { if (cb.checked) done++; });
+    const total = boxes.length;
+    const pct = total === 0 ? 0 : Math.round(done / total * 100);
+    doneEl.innerText = done;
+    totalEl.innerText = total;
+    percentEl.innerText = pct + "%";
+    barEl.style.width = pct + "%";
+
+    // ========== 新增：统计已学习天数 ==========
+    const daySet = new Set();
+    boxes.forEach(cb=>{
+      if(cb.checked){
+        daySet.add(cb.dataset.day);
+      }
+    })
+    studyDaysEl.innerText = daySet.size;
+  }
+
+  function jumpDay(day){
+    if(day<1||day>84) return;
+    currentDay = day;
+    showDay.innerText = day;
+    renderTodayTask(day);
+    //读取当日笔记
+    const noteObj = JSON.parse(localStorage.getItem("en_note")||'{}');
+    noteInput.value = noteObj[day] || '';
+  }
+
+  function load() {
+    const saveData = localStorage.getItem("en_check");
+    if (saveData) {
+      const arr = JSON.parse(saveData);
+      boxes.forEach((cb, i) => {
+        if (arr[i] !== undefined) cb.checked = arr[i];
+      });
+    }
+    calc();
+    jumpDay(1);
+  }
+
+  function resetAll() {
+    if (confirm("确定要清空所有打卡记录吗？此操作无法恢复。")) {
+      localStorage.removeItem("en_check");
+      localStorage.removeItem("en_note");
+      boxes.forEach(cb => cb.checked = false);
+      calc();
+      jumpDay(currentDay);
+    }
+  }
+  function clearCurrentDay(){
+    const dayBoxList = Array.from(boxes).filter(cb => cb.dataset.day == currentDay);
+    dayBoxList.forEach(cb=>cb.checked=false);
+    save();
+  }
+
+  boxes.forEach(cb => cb.addEventListener("change", save));
+  saveDayBtn.onclick = save;
+  clearDayBtn.onclick = clearCurrentDay;
+  noteInput.oninput = save;
+
+  load();
+</script>
+</body>
+</html>
