@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全能英语 3个月｜打卡</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:"PingFang SC","Microsoft Yahei",sans-serif}
+body{background:linear-gradient(135deg,#eef5ff,#f7fbff);color:#222;padding:16px;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto}
+.title-main{text-align:center;font-size:24px;font-weight:bold;color:#2b5b9c;margin-bottom:16px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 2px 10px #0000000c}
+.card h3{margin-bottom:12px;color:#2b5b9c;font-size:18px}
+.progress-row{display:flex;gap:12px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.progress-bar{flex:1;height:16px;background:#e8edf4;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:#4080dd;transition:0.3s;width:0%}
+.stat-text{font-size:15px;color:#333}
+.day-info{font-size:17px;font-weight:bold;margin:10px 0;color:#2b5b9c}
+.task-item{padding:12px 0;border-bottom:1px solid #eee}
+.task-item:last-child{border-bottom:none}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;background:#4080dd;color:#fff;font-size:16px;margin-top:14px;cursor:pointer}
+.btn:disabled{background:#b3c8e8;cursor:not-allowed}
+.list-block{margin-top:10px;line-height:1.8;font-size:15px;color:#444;padding:14px;background:#f8fbff;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- 顶部主标题 -->
+  <div class="title-main">全能英语 3 个月</div>
+
+  <div class="card">
+    <h3>📊 总进度</h3>
+    <div class="progress-row">
+      <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+      <span class="stat-text" id="progressText">0/90</span>
+    </div>
+    <div class="stat-text" style="margin-top:6px">✅ 已学习天数：<span id="learnDayCount">0</span> 天</div>
+  </div>
+
+  <div class="card">
+    <h3>📅 今日任务</h3>
+    <div class="day-info" id="dayTitle"></div>
+    <div id="taskList"></div>
+    <button class="btn" id="checkBtn">✅ 完成今日打卡</button>
+  </div>
+
+  <!-- 课程总览，去掉下拉框，直接静态展示清单 -->
+  <div class="card">
+    <h3>📚 课程总览 3个月</h3>
+    <div class="list-block">
+      <strong>第1月｜发音筑基：</strong>【1-音标课】、【2-自然拼读】、【3-开卷有益】<br><br>
+      <strong>第2月｜词汇句型积累：</strong>【2-自然拼读剩余】、【3-开卷有益】、【4-万能句型】、【5-场景单词】、【6-小词活用】<br><br>
+      <strong>第3月｜场景口语实战+复盘：</strong>【7-场景口语】、复盘专项
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== 90天学习计划表（标注所属章节） =====================
+const plan = [
+  // ====== 第1月 D1~D30 发音筑基 ======
+  {day:1,month:"m1",title:"D1 第1月｜发音筑基",tasks:["【1-音标课】LESSON 1 你以为这26个字母你都读对了吗"]},
+  {day:2,month:"m1",title:"D2 第1月｜发音筑基",tasks:["【1-音标课】LESSON 2 英语语音的两块宝：元音与辅音"]},
+  {day:3,month:"m1",title:"D3 第1月｜发音筑基",tasks:["【1-音标课】LESSON 3 辅音之爆破音：[t] & [d]"]},
+  {day:4,month:"m1",title:"D4 第1月｜发音筑基",tasks:["【1-音标课】LESSON 4 辅音之爆破音：[p] & [b]"]},
+  {day:5,month:"m1",title:"D5 第1月｜发音筑基",tasks:["【1-音标课】LESSON 5 辅音之爆破音：[k] & [g]"]},
+  {day:6,month:"m1",title:"D6 第1月｜发音筑基",tasks:["【1-音标课】LESSON 6 单元音之前元音：[iː] [ɪ] [e] [æ]"]},
+  {day:7,month:"m1",title:"D7 第1月｜发音筑基",tasks:["【1-音标课】LESSON 7 单元音之中元音：[ɜː] [ə]"]},
+  {day:8,month:"m1",title:"D8 第1月｜发音筑基",tasks:["【1-音标课】LESSON 8 单元音之后元音：[uː] [ʊ] [ɔː] [ɒ] [ɑː]"]},
+  {day:9,month:"m1",title:"D9 第1月｜发音筑基",tasks:["【1-音标课】LESSON 9 辅音之摩擦音：[f] & [v]"]},
+  {day:10,month:"m1",title:"D10 第1月｜发音筑基",tasks:["【1-音标课】LESSON 10 辅音之摩擦音：[s] & [z]"]},
+  {day:11,month:"m1",title:"D11 第1月｜发音筑基",tasks:["【1-音标课】LESSON 11 辅音之摩擦音：[θ] & [ð]"]},
+  {day:12,month:"m1",title:"D12 第1月｜发音筑基",tasks:["【1-音标课】LESSON 12 辅音之摩擦音：[ʃ] & [ʒ]"]},
+  {day:13,month:"m1",title:"D13 第1月｜发音筑基",tasks:["【1-音标课】LESSON 13 辅音之摩擦音：[h]"]},
+  {day:14,month:"m1",title:"D14 第1月｜发音筑基",tasks:["【1-音标课】LESSON 14 辅音之摩擦音：[r]"]},
+  {day:15,month:"m1",title:"D15 第1月｜发音筑基",tasks:["【1-音标课】LESSON 15 双元音之浓情双元音：[eɪ] & [aɪ] & [ɔɪ]"]},
+  {day:16,month:"m1",title:"D16 第1月｜发音筑基",tasks:["【1-音标课】LESSON 16 双元音之惊讶双元音：[aʊ] & [əʊ]"]},
+  {day:17,month:"m1",title:"D17 第1月｜发音筑基",tasks:["【1-音标课】LESSON 17 双元音之沮丧双元音[ɪə]、[eə]、[ʊə]"]},
+  {day:18,month:"m1",title:"D18 第1月｜发音筑基",tasks:["【1-音标课】LESSON 18 辅音之破擦音[tʃ] & [dʒ]"]},
+  {day:19,month:"m1",title:"D19 第1月｜发音筑基",tasks:["【1-音标课】LESSON 19 辅音之破擦音[tr] & [dr]"]},
+  {day:20,month:"m1",title:"D20 第1月｜发音筑基",tasks:["【1-音标课】LESSON 20 辅音之破擦音[ts] & [dz]"]},
+  {day:21,month:"m1",title:"D21 第1月｜发音筑基",tasks:["【1-音标课】LESSON 21 浊辅音之鼻音[m]、[n]、[ŋ]"]},
+  {day:22,month:"m1",title:"D22 第1月｜发音筑基",tasks:["【1-音标课】LESSON 22 浊辅音之舌侧音[l]"]},
+  {day:23,month:"m1",title:"D23 第1月｜发音筑基",tasks:["【1-音标课】LESSON 23 浊辅音之半元音[w] & [j]"]},
+  {day:24,month:"m1",title:"D24 第1月｜发音筑基",tasks:["【1-音标课】LESSON 24 音节是个什么鬼?"]},
+  {day:25,month:"m1",title:"D25 第1月｜发音筑基",tasks:["【1-音标课】LESSON 25 中国学生语音“滑铁卢”_辅音连缀","【1-音标课】LESSON 26 令人头大的英语连读"]},
+  {day:26,month:"m1",title:"D26 第1月｜发音筑基",tasks:["【1-音标课】LESSON 27 英语中的略读","【1-音标课】LESSON 28 英语中的浊化"]},
+  {day:27,month:"m1",title:"D27 第1月｜发音筑基",tasks:["【1-音标课】福利篇-弱读","【2-自然拼读】LESSON 29元音字母的读音"]},
+  {day:28,month:"m1",title:"D28 第1月｜发音筑基",tasks:["【2-自然拼读】LESSON 30元音字母Aa相关组合的读音","【2-自然拼读】LESSON 31元音字母Ee相关组合的读音"]},
+  {day:29,month:"m1",title:"D29 第1月｜发音筑基",tasks:["【2-自然拼读】LESSON 32元音字母Ii相关组合的读音","【2-自然拼读】LESSON 33元音字母Oo相关组合的读音"]},
+  {day:30,month:"m1",title:"D30 第1月｜发音筑基",tasks:["【2-自然拼读】LESSON 34元音字母Uu相关组合的读音","【2-自然拼读】LESSON 35半元音字母Yy的读音"]},
+  // ====== 第2月 D31~D60 词汇句型 ======
+  {day:31,month:"m2",title:"D31 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 36辅音字母组合的读音之C相关"]},
+  {day:32,month:"m2",title:"D32 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 37辅音字母组合的读音之H相关"]},
+  {day:33,month:"m2",title:"D33 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 38辅音字母组合的读音之N相关"]},
+  {day:34,month:"m2",title:"D34 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 39辅音字母组合的读音之L相关"]},
+  {day:35,month:"m2",title:"D35 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 40辅音字母组合的读音之R相关"]},
+  {day:36,month:"m2",title:"D36 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 41辅音字母组合的读音之S相关"]},
+  {day:37,month:"m2",title:"D37 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 42三个特殊的辅音字母的读音之L、C、G"]},
+  {day:38,month:"m2",title:"D38 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 43特殊字母组合的读音之Q相关"]},
+  {day:39,month:"m2",title:"D39 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 44特殊字母组合的读音之部分不发音的字母组合"]},
+  {day:40,month:"m2",title:"D40 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 45特殊字母组合之常见词尾的发音"]},
+  {day:41,month:"m2",title:"D41 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 46特殊字母组合之常见多字母组合的发音"]},
+  {day:42,month:"m2",title:"D42 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 47高频字母组合之aXX的发音"]},
+  {day:43,month:"m2",title:"D43 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 48高频字母组合之eXX的发音"]},
+  {day:44,month:"m2",title:"D44 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 49高频字母组合之iXX的发音"]},
+  {day:45,month:"m2",title:"D45 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 50高频字母组合之oXX的发音"]},
+  {day:46,month:"m2",title:"D46 第2月｜词汇句型积累",tasks:["【2-自然拼读】LESSON 51高频字母组合之uXX的发音"]},
+  {day:47,month:"m2",title:"D47 第2月｜词汇句型积累",tasks:["【3-开卷有益】can和can't到底怎么读，你会区分吗？","【3-开卷有益】我没听清真的是“pardon”吗？","【3-开卷有益】字母t到底发t还是d？","【3-开卷有益】动词变形容词到底是Ved还是Ving，你清楚吗？","【3-开卷有益】我不擅长能说 “I'm weak at sth” 吗？"]},
+  {day:48,month:"m2",title:"D48 第2月｜词汇句型积累",tasks:["【3-开卷有益】英语中什么样的句子用升调？","【3-开卷有益】英语中什么样的句子用降调？","【3-开卷有益】字母t哪去了（美式读音专练）","【3-开卷有益】不同等级的“辣”你都会说吗？","【3-开卷有益】美音英音和澳音的差别"]},
+  {day:49,month:"m2",title:"D49 第2月｜词汇句型积累",tasks:["【4-万能句型】LESSON 1 十字要诀 - 想要(一)","【4-万能句型】LESSON 1 十字要诀 - 想要(二)","【4-万能句型】LESSON 1 十字要诀 - 想要(三)","【4-万能句型】LESSON 2 十字要诀 - 是"]},
+  {day:50,month:"m2",title:"D50 第2月｜词汇句型积累",tasks:["【4-万能句型】LESSON 3 万能句型-有（一）","【4-万能句型】LESSON 3 十字要诀 - 有(二)","【4-万能句型】LESSON 4 万能句型-能（一）","【4-万能句型】LESSON 4 十字要诀 - 能(二)"]},
+  {day:51,month:"m2",title:"D51 第2月｜词汇句型积累",tasks:["【4-万能句型】LESSON 5 十字要诀 - 让","【4-万能句型】LESSON 6 十字要诀 - 给","【4-万能句型】LESSON 7 十字要诀 - 做","【4-万能句型】LESSON 8 十字要诀 - 去"]},
+  {day:52,month:"m2",title:"D52 第2月｜词汇句型积累",tasks:["【4-万能句型】LESSON 9 十字要诀 - 拿","【4-万能句型】LESSON 10 母句型1","【4-万能句型】LESSON 11 母句型2","【4-万能句型】LESSON 12 母句型3"]},
+  {day:53,month:"m2",title:"D53 第2月｜词汇句型积累",tasks:["【4-万能句型】LESSON 13 母句型4","【4-万能句型】LESSON 14 母句型5","【4-万能句型】LESSON 15 母句型6","【4-万能句型】LESSON 16 母句型7"]},
+  {day:54,month:"m2",title:"D54 第2月｜词汇句型积累",tasks:["【4-万能句型】LESSON 17 母句型8","【4-万能句型】LESSON 18 母句型9","【4-万能句型】LESSON 19 母句型10","【4-万能句型】LESSON 20 母句型11","【4-万能句型】LESSON 21 母句型12","【4-万能句型】LESSON 22 母句型13","【4-万能句型】LESSON 23 母句型14","【4-万能句型】LESSON 24 母句型15","【4-万能句型】LESSON 25 母句型16","【4-万能句型】LESSON 26 母句型17","【4-万能句型】LESSON 27 母句型18","【4-万能句型】LESSON 28 母句型19","【4-万能句型】LESSON 29 母句型20","【4-万能句型】LESSON 30 母句型21","【4-万能句型】LESSON 31 母句型22","【4-万能句型】LESSON 32 母句型23","【4-万能句型】LESSON 33 母句型24"]},
+  {day:55,month:"m2",title:"D55 第2月｜词汇句型积累",tasks:["【5-场景单词】LESSON 52 家具和家居用品","【5-场景单词】LESSON 53 家用电器和设备","【5-场景单词】LESSON 54 在厨房里","【5-场景单词】LESSON 55 房子内外","【5-场景单词】LESSON 56 我的家庭成员和朋友","【5-场景单词】LESSON 57 描述人们","【5-场景单词】LESSON 58 衣服穿着（服装配饰）","【5-场景单词】LESSON 59 衣服穿着（男装女装）"]},
+  {day:56,month:"m2",title:"D56 第2月｜词汇句型积累",tasks:["【5-场景单词】LESSON 60 野生动物","【5-场景单词】LESSON 61 职业","【5-场景单词】LESSON 62 在城市","【5-场景单词】LESSON 63 旅行工具","【5-场景单词】LESSON 64 身体动作","【5-场景单词】LESSON 65 饮食","【5-场景单词】LESSON 66 玩具","【5-场景单词】LESSON 67 在花园里"]},
+  {day:57,month:"m2",title:"D57 第2月｜词汇句型积累",tasks:["【5-场景单词】LESSON 68 故事时间","【5-场景单词】LESSON 69 宠物相关","【5-场景单词】LESSON 70 身体部位","【5-场景单词】LESSON 71 英文数字及读法","【5-场景单词】LESSON 72 中外节日","【5-场景单词】LESSON 73 时髦词汇","【5-场景单词】LESSON 74 拟声词"]},
+  {day:58,month:"m2",title:"D58 第2月｜词汇句型积累",tasks:["【6-小词活用】LESSON 30 身体部位（上）","【6-小词活用】LESSON 31 身体部位（中）","【6-小词活用】LESSON 32 身体部位（下）","【6-小词活用】小词活用第4课","【6-小词活用】小词活用第5课"]},
+  {day:59,month:"m2",title:"D59 第2月｜词汇句型积累",tasks:["【6-小词活用】LESSON 35 颜色（上）","【6-小词活用】LESSON 36 颜色（下）","【6-小词活用】LESSON 37 金钱","【6-小词活用】LESSON 38 数字","【6-小词活用】LESSON 39 介词副词"]},
+  {day:60,month:"m2",title:"D60 第2月｜词汇句型积累",tasks:["【6-小词活用】LESSON 40 食物","【6-小词活用】LESSON 41 日常物品","【6-小词活用】LESSON 42 动物","【6-小词活用】LESSON 43 小动词（上）","【6-小词活用】LESSON 44 小动词（下）","【6-小词活用】LESSON 45 只说半句的英语谚语","【6-小词活用】小词活用福利篇-off的妙用","【6-小词活用】小词活用福利篇-out的妙用"]},
+  // ====== 第3月 D61~D90 口语实战 ======
+  {day:61,month:"m3",title:"D61 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 46 初次见面","【7-场景口语】LESSON 47 老友见面"]},
+  {day:62,month:"m3",title:"D62 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 48 表达歉意","【7-场景口语】LESSON 49 机场英语(上)"]},
+  {day:63,month:"m3",title:"D63 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 49 机场英语(中)","【7-场景口语】LESSON 49 机场英语(下)"]},
+  {day:64,month:"m3",title:"D64 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 50 机场广播","【7-场景口语】LESSON 51 临行道别"]},
+  {day:65,month:"m3",title:"D65 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 52 谈论吃喝","【7-场景口语】LESSON 53 节食健身"]},
+  {day:66,month:"m3",title:"D66 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 54 每日起居","【7-场景口语】LESSON 55 谈论身体状况"]},
+  {day:67,month:"m3",title:"D67 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 56 谈论天气","【7-场景口语】LESSON 57 一日三餐"]},
+  {day:68,month:"m3",title:"D68 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 58 亲子英语：起床","【7-场景口语】LESSON 59 亲子英语：洗漱"]},
+  {day:69,month:"m3",title:"D69 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 60 亲子英语：穿衣","【7-场景口语】LESSON 61 餐厅场景(上)"]},
+  {day:70,month:"m3",title:"D70 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 77 酒店场景I","【7-场景口语】LESSON 78 酒店场景II"]},
+  {day:71,month:"m3",title:"D71 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 79 酒店场景III","【7-场景口语】LESSON 80 酒店场景IV"]},
+  {day:72,month:"m3",title:"D72 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 81 迷路问路","【7-场景口语】LESSON 82 购物&退税"]},
+  {day:73,month:"m3",title:"D73 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 83 照相","【7-场景口语】LESSON 84 租房"]},
+  {day:74,month:"m3",title:"D74 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 85 打电话","【7-场景口语】LESSON 86 星巴克点餐"]},
+  {day:75,month:"m3",title:"D75 第3月｜场景口语实战",tasks:["【7-场景口语】LESSON 87 数字和数学","【7-场景口语】LESSON 88 过海关及报关"]},
+  {day:76,month:"m3",title:"D76 第3月｜场景口语实战",tasks:["【7-场景口语】场景口语-海外租车自驾游（1）","【7-场景口语】场景口语-海外租车自驾游（2）"]},
+  {day:77,month:"m3",title:"D77 第3月｜场景口语实战",tasks:["【7-场景口语】场景英语-海外租车自驾游（3）","【7-场景口语】场景英语-海外租车自驾游（4）"]},
+  {day:78,month:"m3",title:"D78 第3月｜场景口语实战",tasks:["【7-场景口语】场景英语-海外租车自驾游（5）","【7-场景口语】场景英语-做家务(1)"]},
+  {day:79,month:"m3",title:"D79 第3月｜场景口语实战",tasks:["【7-场景口语】场景英语-做家务(2)","【7-场景口语】场景英语-预约医生"]},
+  {day:80,month:"m3",title:"D80 第3月｜场景口语实战",tasks:["【7-场景口语】场景英语-看医生"]},
+  {day:81,month:"m3",title:"D81 第3月｜场景口语实战",tasks:["【复盘】自由跟读复习：见面、道歉、道别系列口语"]},
+  {day:82,month:"m3",title:"D82 第3月｜场景口语实战",tasks:["【复盘】自由跟读复习：机场、出行、酒店系列口语"]},
+  {day:83,month:"m3",title:"D83 第3月｜场景口语实战",tasks:["【复盘】自由跟读复习：餐厅、购物、看病系列口语"]},
+  {day:84,month:"m3",title:"D84 第3月｜场景口语实战",tasks:["【复盘】自由跟读复习：亲子、居家、租车自驾系列口语"]},
+  {day:85,month:"m3",title:"D85 第3月｜场景口语实战",tasks:["【复盘】口语综合模拟练习"]},
+  {day:86,month:"m3",title:"D86 第3月｜复盘周",tasks:["【复盘】复盘：音标课 + 自然拼读"]},
+  {day:87,month:"m3",title:"D87 第3月｜复盘周",tasks:["【复盘】复盘：万能句型全部母句型"]},
+  {day:88,month:"m3",title:"D88 第3月｜复盘周",tasks:["【复盘】复盘：场景单词 + 小词活用"]},
+  {day:89,month:"m3",title:"D89 第3月｜复盘周",tasks:["【复盘】复盘：全部场景口语对话"]},
+  {day:90,month:"m3",title:"D90 第3月｜结业自测",tasks:["【复盘】整体自测，整理薄弱点，自由输出"]}
+];
+
+// 本地存储
+const STORAGE_KEY = "engCheckData";
+let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+  finishedDays:[],
+  startDay:1
+};
+
+const bar = document.getElementById("bar");
+const progressText = document.getElementById("progressText");
+const learnDayCount = document.getElementById("learnDayCount");
+const dayTitle = document.getElementById("dayTitle");
+const taskList = document.getElementById("taskList");
+const checkBtn = document.getElementById("checkBtn");
+
+function render(){
+  const total = plan.length;
+  const doneCount = data.finishedDays.length;
+  const pct = (doneCount / total *100).toFixed(1);
+  bar.style.width = pct+"%";
+  progressText.innerText = `${doneCount}/${total}`;
+  learnDayCount.innerText = doneCount;
+
+  // 找今天应该学哪一天：取最大未完成天数
+  let todayPlan = null;
+  for(let p of plan){
+    if(!data.finishedDays.includes(p.day)){
+      todayPlan = p;
+      break;
+    }
+  }
+  if(!todayPlan){
+    dayTitle.innerText = "🎉 恭喜！90天课程全部完成！";
+    taskList.innerHTML = "";
+    checkBtn.disabled = true;
+    checkBtn.innerText = "已全部打卡完毕";
+    return;
+  }
+  dayTitle.innerText = todayPlan.title;
+  let html = "";
+  todayPlan.tasks.forEach(t=>{
+    html += `<div class="task-item">• ${t}</div>`;
+  })
+  taskList.innerHTML = html;
+  checkBtn.disabled = false;
+  checkBtn.onclick = ()=>{
+    if(!data.finishedDays.includes(todayPlan.day)){
+      data.finishedDays.push(todayPlan.day);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+      render();
+    }
+  }
+}
+
+render();
+</script>
+</body>
+</html>
